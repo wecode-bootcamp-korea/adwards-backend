@@ -8,7 +8,7 @@ class AdvertisementCategory(models.Model):
         db_table = 'ad_category'
 
 class Tag(models.Model):
-    name = models.CharField(max_length=100, uniqu)
+    name = models.CharField(max_length=100)
 
     class Meta:
         db_table = 'tag'
