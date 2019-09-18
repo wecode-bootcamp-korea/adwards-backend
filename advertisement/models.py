@@ -8,7 +8,7 @@ class AdvertisementCategory(models.Model):
         db_table = 'ad_category'
 
 class Tag(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, uniqu)
 
     class Meta:
         db_table = 'tag'
@@ -23,7 +23,7 @@ class AdvertisementTag(models.Model):
 class Advertisement(models.Model):
     title = models.CharField(max_length=500)
     description = models.TextField()
-    client = models.ForeignKey(Client, on_delete=models.PROTECT)
+    advertiser = models.ForeignKey(Advertiser, on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted = models.BooleanField(default=False, null=True)

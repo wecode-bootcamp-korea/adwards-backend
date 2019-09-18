@@ -25,7 +25,7 @@ class Question(models.Model):
     content = models.CharField(max_length=2500)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    delete = models.BooleanField(default=True, null=True)
+    delete = models.BooleanField(default=False, null=True)
 
     class Meta:
         db_table = 'question'
