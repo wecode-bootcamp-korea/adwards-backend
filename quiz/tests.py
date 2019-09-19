@@ -1,9 +1,14 @@
-from django.test import TestCase, Client
+import json
+import jwt
+import bcrypt
+
 from .views import *
 from advertisement.models import *
 from quiz.models import *
+from user.models import *
+from adwards.my_settings import SECRET_KEY
 
-import json
+from django.test import TestCase, Client
 
 class QuizModelTest(TestCase):
 
@@ -22,10 +27,14 @@ class QuizModelTest(TestCase):
                 id=1,
                 name='coding bootcamp'
                 )
+
+        bytes_pw = bytes('1234', 'utf-8')
+        hashed_pw = bcrypt.hashpw(bytes_pw, bcrypt.gensalt())
+
         advertiser = Advertiser.objects.create(
                 id=1,
                 email='wecode@grace.co',
-                password='12341234',
+                password=hashed_pw,
                 company_name='wecode',
                 balance='1000000',
                 business_license_number='10-345630291-01',
@@ -64,7 +73,7 @@ class QuizModelTest(TestCase):
                 id=2,
                 name='multi_answer'
                 )
-
+        
     def test_question_create_view_positive(self):
         c = Client()
 
@@ -76,7 +85,13 @@ class QuizModelTest(TestCase):
                 'choices':['o','x']
                 }
 
-        response = c.post("/quiz", data=json.dumps(test), content_type='application/json')
+        access_token = jwt.encode(
+                {'user_id':'wecode@grace.co', 'user_type':'advertiser'},
+                SECRET_KEY,
+                'HS256'
+                )
+
+        response = c.post("/quiz", data=json.dumps(test), HTTP_AUTHORIZATION=access_token, content_type='application/json')
         self.assertEqual(response.status_code, 200)
     
     def test_question_create_view_negative(self):
@@ -89,8 +104,14 @@ class QuizModelTest(TestCase):
                     'content':'wecode는 현재 교육중인 기수는 3기이다.',
                     'choices':['o','x']
                     }
+            
+            access_token = jwt.encode(
+                    {'user_id':'wecode@grace.co', 'user_type':'advertiser'},
+                    SECRET_KEY,
+                    'HS256'
+                    )
 
-            response = c.post("/quiz", data=json.dumps(test), content_type='application/json')
+            response = c.post("/quiz", data=json.dumps(test), HTTP_AUTHORIZATION=access_token, content_type='application/json')
             self.assertEqual(response.status_code, 400)
     
     def test_question_create_view_except_case1(self):
@@ -103,11 +124,11 @@ class QuizModelTest(TestCase):
                 'title':'hello_wecode',
                 'content':'wecode는 현재 교육중인 기수는 3기이다.',
                 }
+        access_token = jwt.encode(
+                {'user_id':'wecode@grace.co', 'user_type':'advertiser'},
+                SECRET_KEY,
+                'HS256'
+                )
 
-        response = c.post("/quiz", data=json.dumps(test), content_type='application/json')
+        response = c.post("/quiz", data=json.dumps(test), HTTP_AUTHORIZATION=access_token, content_type='application/json')
         self.assertEqual(response.status_code, 400)
-     
-
-
-
-

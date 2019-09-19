@@ -1,12 +1,14 @@
 import json
 
 from .models        import Question
+from user.utils     import user_login_required, advertiser_login_required
 
 from django.views   import View
 from django.http    import HttpResponse, JsonResponse
 
 class QuizView(View):
     
+    @advertiser_login_required
     def post(self, request):
         try:
             data = json.loads(request.body)
@@ -23,4 +25,4 @@ class QuizView(View):
 
             return HttpResponse(status=200)
         except KeyError:
-            return JsonResponse({"ERROR":"MISSING_DATA"}, status=400)            
+            return JsonResponse({"ERROR":"MISSING_DATA"}, status=400)

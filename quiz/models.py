@@ -18,14 +18,14 @@ class AnswerType(models.Model):
 class Question(models.Model):
     advertisement = models.ForeignKey(Advertisement, on_delete=models.CASCADE)
     question_type = models.ForeignKey(QuestionType, on_delete=models.SET_NULL, null=True)
-    answer_type = models.ForeignKey(AnswerType, on_delete=models.CASCADE)
-    answer = models.CharField(max_length=500)
-    choices = models.CharField(max_length=500)
-    title = models.CharField(max_length=50)
-    content = models.CharField(max_length=2500)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted = models.BooleanField(default=False, null=True)
+    answer_type   = models.ForeignKey(AnswerType, on_delete=models.CASCADE)
+    answer        = models.CharField(max_length=500)
+    choices       = models.CharField(max_length=500)
+    title         = models.CharField(max_length=50)
+    content       = models.CharField(max_length=2500)
+    created_at    = models.DateTimeField(auto_now_add=True)
+    updated_at    = models.DateTimeField(auto_now=True)
+    deleted       = models.BooleanField(default=False, null=True)
 
     class Meta:
         db_table = 'question'
