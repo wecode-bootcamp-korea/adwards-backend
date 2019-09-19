@@ -32,7 +32,7 @@ class IndustryType(models.Model):
     class Meta:
         db_table = 'industry_type'
 
-class Client(models.Model):
+class Advertiser(models.Model):
     email = models.EmailField(max_length=254, unique=True)
     password = models.CharField(max_length=250)
     company_name = models.CharField(max_length=100)
@@ -49,11 +49,11 @@ class Client(models.Model):
     deleted = models.BooleanField(default=False, null=True)
 
     class Meta:
-        db_table = 'client'
+        db_table = 'advertiser'
 
 class User(models.Model):
     nickname = models.CharField(max_length=30, unique=True)
-    email = models.EmailField(max_length=254, null=True)
+    email = models.EmailField(max_length=254, unique=True, null=True)
     password = models.CharField(max_length=250, null=True)
     user_name = models.CharField(max_length=254, null=True)
     age = models.SmallIntegerField(null=True)
