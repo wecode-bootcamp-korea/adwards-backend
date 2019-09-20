@@ -5,34 +5,34 @@ class State(models.Model):
     name = models.CharField(max_length=10)
 
     class Meta:
-        db_table = 'state'
+        db_table = 'states'
 
 class Gender(models.Model):
     name = models.CharField(max_length=10)
 
     class Meta:
-        db_table = 'gender'
+        db_table = 'genders'
 
 class InterestsType(models.Model):
     name = models.CharField(max_length=30)
 
     class Meta:
-        db_table = 'interests_type'
+        db_table = 'interests_types'
 
 class Bank(models.Model):
     name = models.CharField(max_length=30)
     contact = models.CharField(max_length=30) 
     
     class Meta:
-        db_table = 'bank'
+        db_table = 'banks'
 
 class IndustryType(models.Model):
     name = models.CharField(max_length=30)
 
     class Meta:
-        db_table = 'industry_type'
+        db_table = 'industry_types'
 
-class Client(models.Model):
+class Advertiser(models.Model):
     email = models.EmailField(max_length=254, unique=True)
     password = models.CharField(max_length=250)
     company_name = models.CharField(max_length=100)
@@ -49,11 +49,11 @@ class Client(models.Model):
     deleted = models.BooleanField(default=False, null=True)
 
     class Meta:
-        db_table = 'client'
+        db_table = 'advertisers'
 
 class User(models.Model):
     nickname = models.CharField(max_length=30, unique=True)
-    email = models.EmailField(max_length=254, null=True)
+    email = models.EmailField(max_length=254, null=True, unique=True)
     password = models.CharField(max_length=250, null=True)
     user_name = models.CharField(max_length=254, null=True)
     age = models.SmallIntegerField(null=True)
@@ -61,7 +61,7 @@ class User(models.Model):
     gender = models.ForeignKey(Gender, on_delete=models.SET_NULL, null=True)
     cellphone = models.CharField(max_length=20, null=True)
     thumbnail = models.URLField(max_length=2500, null=True)
-    interests = models.ManyToManyField(InterestsType)
+    interests = models.ManyToManyField(InterestsType, through='UsersInterests')
     bank = models.ForeignKey(Bank, on_delete=models.SET_NULL, null=True)
     account_owner = models.CharField(max_length=100)
     account_number = models.CharField(max_length=100)
@@ -70,13 +70,20 @@ class User(models.Model):
     deleted = models.BooleanField(default=False, null=True)
     
     class Meta:
-        db_table = 'user'
+        db_table = 'users'
+
+class UsersInterests(models.Model):
+    interests_type = models.ForeignKey(InterestsType, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "users_interests"
 
 class SocialAuth(models.Model):
     name = models.CharField(max_length=100)
 
     class Meta:
-        db_table = 'social_auth'
+        db_table = 'social_auths'
 
 class SocialAuthUser(models.Model):
     social_login_id = models.CharField(max_length=500)
@@ -85,5 +92,4 @@ class SocialAuthUser(models.Model):
     nickname = models.CharField(max_length=500, null=True)
     
     class Meta:
-        db_table = 'social_auth_user'
-
+        db_table = 'social_auth_users'
