@@ -44,18 +44,18 @@ class AdvertisementLike(models.Model):
     class Meta:
         db_table = 'ad_like'
 
-class WatchHistory(models.Model):
+class QuizHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     advertisement = models.ForeignKey(Advertisement, on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = 'watch_history'
+        db_table = 'quiz_history'
 
 class RewardHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
-    watch_history = models.ForeignKey(WatchHistory, on_delete=models.PROTECT)
+    quiz_history = models.ForeignKey(QuizHistory, on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
