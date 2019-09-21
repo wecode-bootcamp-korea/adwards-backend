@@ -1,5 +1,7 @@
+import jwt
 import json
 import bcrypt
+from datetime import datetime, timedelta
 
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
@@ -7,6 +9,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views import View
 
 from .models import User, Advertiser, InterestsType, State, Gender, Bank, IndustryType, UsersInterests
+from adwards.settings import SECRET_KEY
 
 class UserSignup(View):
     def post(self, request):
@@ -99,3 +102,53 @@ class AdvertiserSignup(View):
         
         except KeyError:
             JsonResponse({"ERROR":"KEY_MISSING"}, status=400)
+
+class UserSignin(View):
+    def post(self, request):
+        try:
+            reqst = json.loads(request.body)
+
+            if User.objects.filter(email=reqst['email']).exists():
+                user = User.objects.get(email=reqst['email'])
+            else:
+                return JsonResponse({"ERROR":"ID_NOT_EXIST"}, status=401)
+
+            if bcrypt.checkpw(reqst['password'].encode('utf-8'), user.password.encode('utf-8')):
+                payload = {
+                        'user_id'   :user.email,
+                        'user_type' :'user',
+                        'exp'       :datetime.utcnow() + timedelta(days=1),
+                        'iat'       :datetime.utcnow()
+                        }
+                token = jwt.encode(payload, SECRET_KEY, "HS256")
+
+                return JsonResponse({"access_token":token.decode('utf-8')})
+            else:
+                return JsonResponse({"ERROR":"INVALID_PWD"}, status=401)
+        except KeyError:
+            return JsonResponse({"ERROR":"MISSING_DATA"}, status=400)
+
+class AdvertiserSignin(View):
+    def post(self, request):
+        try:
+            reqst = json.loads(request.body)
+
+            if Advertiser.objects.filter(email=reqst['email']).exists():
+                advertiser = Advertiser.objects.get(email=reqst['email'])
+            else:
+                return JsonResponse({"ERROR":"ID_NOT_EXIST"}, status=401)
+
+            if bcrypt.checkpw(reqst['password'].encode('utf-8'), advertiser.password.encode('utf-8')):
+                payload = {
+                        'user_id'   :advertiser.email,
+                        'user_type' :'advertiser',
+                        'exp'       :datetime.utcnow() + timedelta(days=1),
+                        'iat'       :datetime.utcnow()
+                        }
+                token = jwt.encode(payload, SECRET_KEY, "HS256")
+
+                return JsonResponse({"access_token":token.decode('utf-8')})
+            else:
+                return JsonResponse({"ERROR":"INVALID_PWD"}, status=401)
+        except KeyError:
+            return JsonResponse({"ERROR":"MISSING_DATA"}, status=400)
