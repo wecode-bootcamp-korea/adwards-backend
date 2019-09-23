@@ -1,7 +1,11 @@
 import json
 from django.test import TestCase, Client
+
+from user.models import *
+from user.views import *
 from .models import *
 from .views import *
+
 
 class AdvertiserSignupTest(TestCase):
     def setUp(self):
