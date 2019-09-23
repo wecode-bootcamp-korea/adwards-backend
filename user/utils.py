@@ -17,7 +17,7 @@ def user_login_required(func):
                 if user_type == 'advertiser':
                     return JsonResponse({"ERROR":"INVALID_USER"}, status=401)
 
-                request.user = User.objects.get(email=payload['user_id'])
+                request.user = User.objects.get(email=payload['user_email'])
 
                 return func(self, request, *args, **kwargs)
             except jwt.DecodeError:
@@ -40,14 +40,15 @@ def advertiser_login_required(func):
                 if user_type == 'user':
                     return JsonResponse({"ERROR":"INVALID_USER"}, status=401)
 
-                request.user = Advertiser.objects.get(email=payload['user_id'])
+                request.user = Advertiser.objects.get(email=payload['user_email'])
 
                 return func(self, request, *args, **kwargs)
+
             except jwt.DecodeError:
                 return JsonResponse({"ERROR":"INVALID_TOKEN"}, status=401)
             except Advertiser.DoesNotExist:
                 return JsonResponse({"ERROR":"ID_NOT_EXIST"}, status=401)
+
         else:
             return JsonResponse({"ERROR":"LOGIN_REQUIERD"}, status=401)
     return decorated_function
-
