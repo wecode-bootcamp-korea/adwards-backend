@@ -14,7 +14,7 @@ from .models     import (AdvertisementCategory,Tag,  AdvertisementTag, Advertise
 class AdvertisementCreateListGetView(View):
     @advertiser_login_required 
     def post(self, request):
-        data        = json.loads(request.body)
+        data = json.loads(request.body)
    
         try: 
             new_advertisement = ( 
@@ -67,7 +67,7 @@ class AdvertisementCreateListGetView(View):
     @user_login_mark
     @advertiser_login_mark
     def get(self, request):        
-        advertisements = Advertisement.objects 
+        advertisements = Advertisement.objects.filter(deleted=False) 
     
         try:
             offset         = int(request.GET.get('offset', '0'))
@@ -81,8 +81,8 @@ class AdvertisementCreateListGetView(View):
             advertiser     = request.GET.get('advertiser', None)
             
             if advertiser == 'set':
-                advertisements = advertisements.filter(advertiser=request.advertiser) 
-                on_advertisements = advertisements.filter(switch=True)
+                advertisements     = advertisements.filter(advertiser=request.advertiser)
+                on_advertisements  = advertisements.filter(switch=True)
                 off_advertisements = advertisements.filter(switch=False)
 
                 def querytolist(queryset):
@@ -99,6 +99,8 @@ class AdvertisementCreateListGetView(View):
                         "off_advertisement":querytolist(off_advertisements)}, 
                         status=200
                         )
+
+            advertisements = advertisements.filter(switch=True)
 
             if category_id != 0:
                 advertisements = advertisements.filter(ad_category_id=category_id)       
