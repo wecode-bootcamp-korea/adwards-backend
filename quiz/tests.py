@@ -1,31 +1,34 @@
-from django.test import TestCase, Client
-from .views import *
-from advertisement.models import *
-from quiz.models import *
-
 import json
+import bcrypt
+import jwt
+
+from .views                 import *
+from advertisement.models   import *
+from quiz.models            import *
+from adwards.settings       import SECRET_KEY
+
+from django.test            import TestCase, Client
 
 class QuizModelTest(TestCase):
-
     def setUp(self):
         industry_type = IndustryType.objects.create(
                 id=1,
                 name='교육사업'
                 )
-
         ad_category = AdvertisementCategory.objects.create(
                 id=1,
                 name='교육'
                 )
-        
         tag = Tag.objects.create(
                 id=1,
                 name='coding bootcamp'
                 )
+        bytes_pw = bytes('1234', 'utf-8')
+        hashed_pw = bcrypt.hashpw(bytes_pw, bcrypt.gensalt())
         advertiser = Advertiser.objects.create(
                 id=1,
                 email='wecode@grace.co',
-                password='12341234',
+                password=hashed_pw.decode('utf-8'),
                 company_name='wecode',
                 balance='1000000',
                 business_license_number='10-345630291-01',
@@ -36,7 +39,6 @@ class QuizModelTest(TestCase):
                 homepage='https://wecode.co.kr',
                 thumbnail='https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/landing/bootcamp/boot_4.jpg',
                 )
-
         advertisement = Advertisement.objects.create(
                 id=1,
                 title='3개월만에 개발자?',
@@ -48,18 +50,15 @@ class QuizModelTest(TestCase):
                 price_per_view='100',
                 switch=True
                 )
-
         advertisement_tag = AdvertisementTag(
                 id=1,
                 advertisement=advertisement,
                 tag=tag
                 )
-
         question_type = QuestionType.objects.create(
                 id=2,
                 name='multi_choices'
                 )
-
         answer_type = AnswerType.objects.create(
                 id=2,
                 name='multi_answer'
@@ -67,47 +66,58 @@ class QuizModelTest(TestCase):
 
     def test_question_create_view_positive(self):
         c = Client()
+        
+        login_test = {
+            "email":"wecode@grace.co",
+            "password":"1234"
+        }
 
         test = {
                 "ad_id":1,
-                'answer':['o'],
-                'title':'hello_wecode',
-                'content':'wecode는 현재 교육중인 기수는 3기이다.',
-                'choices':['o','x']
-                }
+                "quizzes":
+                [
+                    {
+                        'title':'hello_wecode',
+                        'content':'wecode는 현재 교육중인 기수는 3기이다.',
+                        'choices':['o','x'],
+                        'answer':['o']
+                    }
+                ]
+        }
 
-        response = c.post("/quiz", data=json.dumps(test), content_type='application/json')
+        login_response = c.post("/signin/advertiser", data=json.dumps(login_test), content_type="application/json")
+        access_token = login_response.json()["access_token"]
+        response = c.post("/quiz", data=json.dumps(test), HTTP_AUTHORIZATION=access_token, content_type='application/json')
         self.assertEqual(response.status_code, 200)
     
     def test_question_create_view_negative(self):
-            c = Client()
-
-            test = {
-                    "ad_id":'add',
-                    'answer':['o'],
-                    'title':'hello_wecode',
-                    'content':'wecode는 현재 교육중인 기수는 3기이다.',
-                    'choices':['o','x']
-                    }
-
-            response = c.post("/quiz", data=json.dumps(test), content_type='application/json')
-            self.assertEqual(response.status_code, 400)
-    
-    def test_question_create_view_except_case1(self):
         c = Client()
+        
+        login_test = {
+            "email":"wecode@grace.co",
+            "password":"1234"
+        }
 
         test = {
-                'quest_id':2,
-                'answer_id':2,
-                'answer':['o'],
-                'title':'hello_wecode',
-                'content':'wecode는 현재 교육중인 기수는 3기이다.',
-                }
+                "ad_id":1,
+                "quizzes":
+                [
+                    {
+                        'title':'hello_wecode',
+                        'content':'wecode는 현재 교육중인 기수는 3기이다.',
+                        'choices':['o','x'],
+                        'answer':['o']
+                    },
+                    {
+                        'title':'hello_wecode',
+                        'content':'wecode는 현재 교육중인 기수는 3기이다.',
+                        'choices':['o','x'],
+                        'answer':['o']
+                    }
+                ]
+        }
 
-        response = c.post("/quiz", data=json.dumps(test), content_type='application/json')
-        self.assertEqual(response.status_code, 400)
-     
-
-
-
-
+        login_response = c.post("/signin/advertiser", data=json.dumps(login_test), content_type="application/json")
+        access_token = login_response.json()["access_token"]
+        response = c.post("/quiz", data=json.dumps(test), HTTP_AUTHORIZATION=access_token, content_type='application/json')
+        self.assertEqual(response.status_code, 200) 
