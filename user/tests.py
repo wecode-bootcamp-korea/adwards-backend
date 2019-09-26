@@ -3,9 +3,13 @@ import bcrypt
 import jwt
 
 from django.test import TestCase, Client
+
+from user.models import *
+from user.views import *
 from .models import *
 from .views import *
 from adwards.settings import SECRET_KEY
+
 
 class AdvertiserSignupTest(TestCase):
     def setUp(self):
