@@ -38,7 +38,7 @@ class Choices(models.Model):
         db_table = 'choices'
 
 class Answer(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='questions_set')
+    questions = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='questions_set')
     choices = models.ForeignKey(Choices, on_delete=models.CASCADE, related_name='choices_set')
 
     class Meta:

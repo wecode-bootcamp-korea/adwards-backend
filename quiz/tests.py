@@ -112,9 +112,9 @@ class QuizModelTest(TestCase):
                 content = '21'
         )
 
-        answer  = Answer.objects.create(question = questions, choices_id=1)
+        answer  = Answer.objects.create(questions = questions, choices_id=1)
         answers = [
-            Answer(question = questions_2, choices_id=choice)
+            Answer(questions = questions_2, choices_id=choice)
             for choice in [3, 4]
         ]
         answer_2 = Answer.objects.bulk_create(answers)
@@ -262,3 +262,53 @@ class QuizModelTest(TestCase):
         response = c.get("/advertisement/10/quiz", content_type='application/json')
         pprint(response.json())
         self.assertEqual(response.json(), [])
+    
+    def test_question_history_list_view(self):
+        c = Client()
+        
+        login_test = {
+            "email":"mail@mail.com",
+            "password":"1234"
+        }
+
+        test = {
+                "ad_id":1,
+                "user_answers": [
+                                {"quiz_id": 1, "answers": [1]},
+                                {"quiz_id": 2, "answers": [3,4]}
+                               ]
+        }
+        
+        login_response = c.post("/signin/user", data=json.dumps(login_test), content_type="application/json")
+        access_token = login_response.json()["access_token"]
+        correct_response = c.post("/quiz/answer", data=json.dumps(test), HTTP_AUTHORIZATION=access_token, content_type='application/json')
+        response = c.get("/quiz/history?offset=0&limit=10", HTTP_AUTHORIZATION=access_token, content_type = "application/json")
+
+    def test_question_donut_chart_view(self):
+        c = Client()
+        
+        user_login_test = {
+            "email":"mail@mail.com",
+            "password":"1234"
+        }
+
+        advertiser_login_test = {
+            "email":"wecode@grace.co",
+            "password":"1234"
+        }
+
+        test = {
+                "ad_id":1,
+                "user_answers": [
+                                {"quiz_id": 1, "answers": [1]},
+                                {"quiz_id": 2, "answers": [3,4]}
+                               ]
+        }
+        
+        login_response = c.post("/signin/user", data=json.dumps(user_login_test), content_type="application/json")
+        access_token = login_response.json()["access_token"]
+        c.post("/quiz/answer", data=json.dumps(test), HTTP_AUTHORIZATION=access_token, content_type='application/json')
+        login_response = c.post("/signin/advertiser", data=json.dumps(advertiser_login_test), content_type="application/json")
+        access_token = login_response.json()["access_token"] 
+        response = c.get("/advertisement/1/chart", HTTP_AUTHORIZATION=access_token, content_type='application/json')
+        print(response.json())

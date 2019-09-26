@@ -63,7 +63,7 @@ class UserSignup(View):
             return HttpResponse(status=200)
 
         except KeyError:
-            JsonResponse({"ERROR":"KEY_MISSING"}, status=400)
+            return JsonResponse({"ERROR":"KEY_MISSING"}, status=400)
 
 class AdvertiserSignup(View):
     def post(self, request):
@@ -98,10 +98,9 @@ class AdvertiserSignup(View):
                     homepage = reqst["homepage"],
                     thumbnail = reqst["thumbnail"]
             )
-            return HttpResponse(status=200)
-        
+            return HttpResponse(status = 200)
         except KeyError:
-            JsonResponse({"ERROR":"KEY_MISSING"}, status=400)
+            return JsonResponse({"ERROR":"KEY_MISSING"}, status=400)
 
 class UserSignin(View):
     def post(self, request):
