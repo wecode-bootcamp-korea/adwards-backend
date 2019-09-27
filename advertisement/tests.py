@@ -404,9 +404,8 @@ class AdvertisementTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
         
-        
         response = c.get("/advertiser/advertisementdetail/1", **{"HTTP_Authorization":Authorization_advertiser, "content_type":"application/json"} )
-
+        print(response.json())
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(),    
                 {"RESULT": {

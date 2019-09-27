@@ -77,28 +77,28 @@ class UserAdvertisementsView(View):
             offset = int(request.GET.get('offset', '0'))
             limit  = int(request.GET.get('limit', '3'))
 
+            interests_list = request.user.interests.all()
+            advertisements = (
+                Advertisement.objects.filter(
+                    deleted=False, switch=True, interests__in=interests_list 
+                    ).distinct()
+            ) 
+
+            total_count = advertisements.count()
+            advertisements = advertisements[offset:limit]    
+            
+            result = [
+                {
+                    "advertisement_id": advertisement.id,
+                    "title":            advertisement.title,
+                    "thumbnail":        advertisement.thumbnail,
+                    "price_per_view":   int(advertisement.price_per_view),
+                } for advertisement in advertisements  
+            ]
+            return JsonResponse({"RESULT":result, "total_count":total_count}, status=200)
+
         except ValueError:
             return JsonResponse({"ERROR":"INVALID_QUERYSTRING"}, status=400)
-
-        interests_list = request.user.interests.all()
-        advertisements = (
-            Advertisement.objects.filter(
-                deleted=False, switch=True, interests__in=interests_list 
-                ).distinct()
-        ) 
-
-        total_count = advertisements.count()
-        advertisements = advertisements[offset:limit]    
-        
-        result = [
-            {
-                "advertisement_id": advertisement.id,
-                "title":            advertisement.title,
-                "thumbnail":        advertisement.thumbnail,
-                "price_per_view":   int(advertisement.price_per_view),
-            } for advertisement in advertisements  
-        ]
-        return JsonResponse({"RESULT":result, "total_count":total_count}, status=200)
 
     def post(self, request):
         try:  
@@ -109,11 +109,7 @@ class UserAdvertisementsView(View):
             category_id = (
                 int(request.GET["category_id"]) if "category_id" in request.GET  else None
                 ) 
-
-        except ValueError:
-            return JsonResponse({"ERROR":"INVALID_QUERYSTRING"}, status=400)
-
-        try:
+            
             advertisements = Advertisement.objects.filter(deleted=False, switch=True)       
 
             if Tag.objects.filter(name=tag).exists(): 
@@ -141,8 +137,9 @@ class UserAdvertisementsView(View):
             ]
 
             return JsonResponse({"RESULT":result, "total_count":total_count}, status=200)
-        except Exception as e: 
-            return JsonResponse({"ERROR":f"{e}"})
+
+        except ValueError:
+            return JsonResponse({"ERROR":"INVALID_QUERYSTRING"}, status=400)
         
 class AdvertiserAdvertisementsView(View):
     @advertiser_login_required
@@ -213,48 +210,33 @@ class AdvertiserAdvertisementDetailView(View):
     @advertiser_login_required
     def post(self, request, advertisement_id):
         data = json.loads(request.body)
+        
         try:
             advertisement = Advertisement.objects.filter(deleted=False).get(id=advertisement_id)
            
-            if "title" in data:
-                advertisement.title = data["title"]
-
-            if "description" in data:
-                advertisement.description = data["description"]
-
-            if "ad_category_id" in data:
-                advertisement.ad_category_id = data["ad_category_id"] 
-
-            if "video_link" in data: 
-                advertisement.video_link =data["video_link"]
-
-            if "thumbnail" in data: 
-                advertisement.thumbnail = data["thumbnail"]
-            
-            if "budget" in data:
-                advertisement.budget = data["budget"]
-
-            if "switch" in data: 
-                advertisement.switch = data["switch"]
-
-            if "interests_type_id" in data: 
-                interests = InterestsType.objects.filter(id__in=data["interests_type_id"])
-                advertisement.interests.set(interests)
-
-            if "tag" in data: 
-                tag_updated = data["tag"]
-                tag_list    = []
-                tags        = Tag.objects
-
-                for tag in tag_updated: 
-                    if tags.filter(name=tag).exists():
-                        tag_list.append(tags.get(name=tag))
+            for field in data: 
+                if field != "tag":
+                    if field == "interests_type_id":
+                        value = InterestsType.objects.filter(id__in=data[field])
+                        advertisement.interests.set(value)
                     else:
-                        new_tag = tags.create(name=tag)
-                        tag_list.append(new_tag) 
+                        value = data[field]
 
-                advertisement.tag.set(tag_list) 
-     
+                    setattr(advertisement, field, value)
+
+                if field == "tag": 
+                    tag_list    = []
+                    tags        = Tag.objects
+
+                    for tag in data[field]:
+                        if tags.filter(name=tag).exists():
+                            tag_list.append(tags.get(name=tag))
+                        else:
+                            new_tag = tags.create(name=tag)
+                            tag_list.append(new_tag) 
+
+                    advertisement.tag.set(tag_list) 
+
             advertisement.save()
 
             return HttpResponse(status=200)
