@@ -4,6 +4,7 @@ import bcrypt
 from django.http            import HttpResponse, JsonResponse
 from django.views           import View
 from django.core.exceptions import ValidationError
+from django.db.utils        import IntegrityError
 
 from user.utils  import advertiser_login_required, user_login_required
 from user.models import User, Advertiser, InterestsType, State, Gender, UsersInterests
@@ -164,3 +165,128 @@ class AdvertiserAdvertisementsView(View):
             "off_advertisement":querytolist(off_advertisements)
             }, status=200
         )
+
+class AdvertiserAdvertisementDetailView(View):
+    @advertiser_login_required
+    def get(self, request, advertisement_id):
+        try:
+            advertisement = Advertisement.objects.filter(deleted=False).get(id=advertisement_id) 
+            advertiser = request.user
+
+            tags = advertisement.tag.all()
+            tag_list = [tag.name for tag in tags]
+
+            interests = advertisement.interests.all()
+            interests_type_id_list = [interest.id for interest in interests]
+
+            result = {
+              "title":             advertisement.title,
+              "description":       advertisement.description,
+              "video_link":        advertisement.video_link,
+              "view_count":        advertisement.view_count,
+              "price_per_view":    int(advertisement.price_per_view),
+              "advertiser_id":     advertisement.id,
+              "tag":               tag_list,
+              "thumbnail":         advertisement.thumbnail,
+              "budget":            int(advertisement.budget),
+              "interests_type_id": interests_type_id_list,
+              "switch":            advertisement.switch
+            }
+
+            return JsonResponse({"RESULT": result}, status=200)
+
+        except Advertisement.DoesNotExist:
+            return JsonResponse({"ERROR":"INVALID_ADVERTISEMENT_ID"}, status=404)
+    
+    @advertiser_login_required
+    def delete(self, request, advertisement_id):
+        try:
+            advertisement = Advertisement.objects.filter(deleted=False).get(id=advertisement_id)
+            advertisement.deleted = True
+            advertisement.save() 
+
+            return HttpResponse(status=200)  
+        
+        except Advertisement.DoesNotExist:
+            JsonResoponse({"ERROR":"INVALID_ADVERTISEMENT_ID"}, status=404)
+    
+    @advertiser_login_required
+    def post(self, request, advertisement_id):
+        data = json.loads(request.body)
+        try:
+            advertisement = Advertisement.objects.filter(deleted=False).get(id=advertisement_id)
+           
+            if "title" in data:
+                advertisement.title = data["title"]
+
+            if "description" in data:
+                advertisement.description = data["description"]
+
+            if "ad_category_id" in data:
+                advertisement.ad_category_id = data["ad_category_id"] 
+
+            if "video_link" in data: 
+                advertisement.video_link =data["video_link"]
+
+            if "thumbnail" in data: 
+                advertisement.thumbnail = data["thumbnail"]
+            
+            if "budget" in data:
+                advertisement.budget = data["budget"]
+
+            if "switch" in data: 
+                advertisement.switch = data["switch"]
+
+            if "interests_type_id" in data: 
+                interests = InterestsType.objects.filter(id__in=data["interests_type_id"])
+                advertisement.interests.set(interests)
+
+            if "tag" in data: 
+                tag_updated = data["tag"]
+                tag_list    = []
+                tags        = Tag.objects
+
+                for tag in tag_updated: 
+                    if tags.filter(name=tag).exists():
+                        tag_list.append(tags.get(name=tag))
+                    else:
+                        new_tag = tags.create(name=tag)
+                        tag_list.append(new_tag) 
+
+                advertisement.tag.set(tag_list) 
+     
+            advertisement.save()
+
+            return HttpResponse(status=200)
+
+        except Advertisement.DoesNotExist:
+            return JsonResoponse({"ERROR":"INVALID_ADVERTISEMENT_ID"}, status=404)
+        except ValidationError:
+            return JsonResoponse({"ERROR":"INVALID_DATA_TYPE"})
+        except IntegrityError:
+            return JsonResoponse({"ERROR":"INVALID_INPUT"})
+
+class UserAdvertisementDetailView(View):
+    def get(self,request, advertisement_id):
+        try: 
+            advertisement = Advertisement.objects.filter(deleted=False, switch=True).get(id=advertisement_id)
+
+            tags = advertisement.tag.all()
+            tag_list = [tag.name for tag in tags]
+
+            result = {
+              "title":             advertisement.title,
+              "description":       advertisement.description,
+              "video_link":        advertisement.video_link,
+              "view_count":        advertisement.view_count,
+              "price_per_view":    int(advertisement.price_per_view),
+              "advertiser_id":     advertisement.id,
+              "company_name":      advertisement.advertiser.company_name,
+              "tag":               tag_list,
+              "thumbnail":         advertisement.thumbnail,
+            }
+
+            return JsonResponse({"RESULT": result}, status=200)
+
+        except Advertisement.DoesNotExist:
+            return JsonResponse({"ERROR":"INVALID_ADVERTISEMENT_ID"}, status=404)
