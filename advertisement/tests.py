@@ -356,3 +356,95 @@ class AdvertisementTest(TestCase):
                 ]
                 }
         ) 
+
+
+    def test_advetiser_advertisement(self):
+        advertiser_payload = {
+                "user_email": "mail@mail.com",
+                "user_type":  "advertiser"
+                }
+        Authorization_advertiser = (
+            jwt.encode(advertiser_payload, SECRET_KEY, "HS256").decode('utf-8')
+        )
+        
+        c = Client()
+        
+        response = c.get("/user/advertisementdetail/1", **{"HTTP_Authorization":Authorization_advertiser, "content_type":"application/json"} )
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(),    
+            {"RESULT": 
+                {
+                    'title':                 'title1',
+                    'description':           'description1',
+                    'advertiser_id':        1,
+                    'video_link':            'video_link1',
+                    'thumbnail':             'thumbnail1',
+                    'price_per_view':        100,
+                    'tag':                   ['개발1'],
+                    'view_count':            0, 
+                    'company_name' : '한바름',
+                     }
+                }
+        )
+        
+        test3 = {
+                'title':                 '1title',
+                'description':           '1description',
+                'ad_category_id':         2,
+                'video_link':            '1video_link',
+                'thumbnail':             '1thumbnail',
+                'budget':                20000000,
+                'tag':                   ['1개발'],
+                'interests_type_id':     [2],
+                'switch':                'False',
+                }
+
+        response = c.post("/advertiser/advertisementdetail/1", json.dumps(test3), **{"content_type":"application/json", "HTTP_Authorization":Authorization_advertiser})
+
+        self.assertEqual(response.status_code, 200)
+        
+        response = c.get("/advertiser/advertisementdetail/1", **{"HTTP_Authorization":Authorization_advertiser, "content_type":"application/json"} )
+        print(response.json())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(),    
+                {"RESULT": {
+                'title':                 '1title',
+                'description':           '1description',
+                'advertiser_id':        1,
+                'video_link':            '1video_link',
+                'thumbnail':             '1thumbnail',
+                'budget':                20000000,
+                'price_per_view':        100,
+                'tag':                   ['1개발'],
+                'interests_type_id':     [2],
+                'switch':                False,
+                'view_count':            0, 
+                }
+                }
+        )
+       
+        response = c.delete("/advertiser/advertisementdetail/1",**{
+            "HTTP_Authorization":Authorization_advertiser, "content_type":"application/json"
+            })
+        
+        self.assertEqual(response.status_code, 200)
+
+
+        response = c.get("/user/advertisementdetail/1", **{"HTTP_Authorization":Authorization_advertiser, "content_type":"application/json"} )
+        
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json(),    
+            {
+                "ERROR": "INVALID_ADVERTISEMENT_ID" 
+            }
+        )
+        
+        response = c.get("/advertiser/advertisementdetail/1", **{"HTTP_Authorization":Authorization_advertiser, "content_type":"application/json"} )
+        
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json(),    
+            {
+                "ERROR": "INVALID_ADVERTISEMENT_ID" 
+            }
+        )
