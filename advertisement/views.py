@@ -244,9 +244,9 @@ class AdvertiserAdvertisementDetailView(View):
         except Advertisement.DoesNotExist:
             return JsonResoponse({"ERROR":"INVALID_ADVERTISEMENT_ID"}, status=404)
         except ValidationError:
-            return JsonResoponse({"ERROR":"INVALID_DATA_TYPE"})
+            return JsonResoponse({"ERROR":"INVALID_DATA_TYPE"}, status=400)
         except IntegrityError:
-            return JsonResoponse({"ERROR":"INVALID_INPUT"})
+            return JsonResoponse({"ERROR":"INVALID_INPUT"}, status=400)
 
 class UserAdvertisementDetailView(View):
     def get(self,request, advertisement_id):
