@@ -7,7 +7,7 @@
 | Data Params          | { user_name: [string], nickname: [string](unique), email: [string](unique), password: [string], age: [integer], state_id: [integer], gender_id: [integer], cellphone: [string],   thumbnail: [string], bank_id: [integer], account_owner: [string], account_number: [string], interests: [array composed of integer] } |
 | Success Response     | Code:200, Content: None                                      |
 | Error Response       | Code: 400,Conetent: "ERROR": "INVALID_EMAIL" Code: 400,Conetent: "ERROR": "EMAIL_EXISTING" Code: 400,Conetent: "ERROR": "NICKNAME_EXISTING" Code: 400,Conetent: "ERROR": "INVALID_PASSWORD" Code: 400,Conetent: "ERROR": "NAME_MISSING" Code: 400,Conetent: "ERROR": "KEY_MISSING" |
-| Sample Call          | { user_name: "한바름", nickname: "별명", email: "mail@mail.com", password: "12345678", age: 30, state_id: 1, gender_id: 1, cellphone: 01012341234, thumbnail: "https://www.notion.so/Django-test-py-8e2b1605e5864357bcd05971f23f686d", bank_id: 1, account_owner: "한바름", account_number: "010010010", interests: [1, 2, 3, 4] } |
+| Sample Call          | { user_name: "한바름", nickname: "별명", email: "mail@mail.com", password: "12345678", age: 30, state_id: 1, gender_id: 1, cellphone: 01012341234, thumbnail: "http://someimagelink.com/imgae", bank_id: 1, account_owner: "한바름", account_number: "010010010", interests: [1, 2, 3, 4] } |
 | Notes                | Ref. banks, genders, interests_types   -Validation fail condition  name: 0 character  email: not email form, duplicated value nickname: duplicated value password: none or under 8 character |
 
 
@@ -20,7 +20,7 @@
 | Data Params          | { company_name: [string](unique), business_license_number: [integer], email: [string](unique), password: [string], industry_type_id: [integer], contact: [string], thumbnail: [string], homepage: [string], company_address: [string], company_description: [string], } |
 | Success Response     | Code:200, Content: None                                      |
 | Error Response       | Code: 400,Conetent: "ERROR": "INVALID_EMAIL" Code: 400,Conetent: "ERROR": "EMAIL_EXISTING" Code: 400,Conetent: "ERROR": "INVALID_PASSWORD" Code: 400,Conetent: "ERROR": "COMPANYNAME_MISSING" Code: 400,Conetent: "ERROR": "KEY_MISSING" |
-| Sample Call          | { company_name: "위코드", business_license_number: "12341234", email: "mail@mail.com", password: "12345678", industry_type_id: 1, contact: "01012341234", thumbnail:"https://www.notion.so/Django-test-py-8e2b1605e5864357bcd05971f23f686d", homepage:"https://www.notion.so/Django-test-py-8e2b1605e5864357bcd05971f23f686d", company_address: "서울 강남구 위워크 7층", company_description: "한국 최고의 개발자 양성 학교", } |
+| Sample Call          | { company_name: "위코드", business_license_number: "12341234", email: "mail@mail.com", password: "12345678", industry_type_id: 1, contact: "01012341234", thumbnail:"http://someimagelink.com/imgae", homepage:"wecode.co.kr", company_address: "서울 강남구 위워크 7층", company_description: "한국 최고의 개발자 양성 학교", } |
 | Notes                | Ref. industry_types    -Validation fail condition  company_name: 0 character  email: not email form, duplicated value password: none or under 8 character |
 
 | Title                | AdvertiserSignin                                             |
@@ -187,13 +187,13 @@ Normalization Table
 
 gender
 | id              | name           |
-| --------------- | -------------- |
+|-----------------|----------------|
 | 1               | 남성           |
 | 2               | 여성           |
 
 interests_types
 | id              | name           |
-| --------------- | -------------- |
+|-----------------|----------------|
 | 1               | 쇼핑           |
 | 2               | 의류           |
 | 3               | 장난감         |
@@ -217,7 +217,7 @@ interests_types
 
 reigon
 | id              |name          |
-| --------------- | -------------- |
+|-----------------|----------------|
 | 1               | 서울특별시     |
 | 2               | 인천광역시     |
 | 3               | 대전광역시     |
@@ -235,7 +235,7 @@ reigon
 
 IndustryType
 | id              | name           |
-| --------------- | -------------- |
+|-----------------|----------------|
 | 1               | 제조업         |
 | 2               | 금융           |
 | 3               | 건설           |
@@ -258,7 +258,7 @@ IndustryType
 
 ad_categories
 | id              | name           |
-| --------------- | -------------- |
+|-----------------|----------------|
 | 1               | 드라마         |
 | 2               | 코믹           |
 | 3               | 음악           |
@@ -272,7 +272,7 @@ ad_categories
 
 banks 
 | id    | name         | contact      |
-| ----- | ------------ | ------------ |
+|-----|------------|------------|
 | 1     | KEB하나은행  | 02-1201-2001 |
 | 2     | SC제일은행   | 02-1201-2002 |
 | 3     | 국민은행     | 02-1201-2003 |
