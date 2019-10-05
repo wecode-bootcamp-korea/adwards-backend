@@ -9,9 +9,10 @@
 | Error Response       | Code: 400,Conetent: "ERROR": "INVALID_EMAIL" Code: 400,Conetent: "ERROR": "EMAIL_EXISTING" Code: 400,Conetent: "ERROR": "NICKNAME_EXISTING" Code: 400,Conetent: "ERROR": "INVALID_PASSWORD" Code: 400,Conetent: "ERROR": "NAME_MISSING" Code: 400,Conetent: "ERROR": "KEY_MISSING" |
 | Sample Call          | { user_name: "한바름", nickname: "별명", email: "mail@mail.com", password: "12345678", age: 30, state_id: 1, gender_id: 1, cellphone: 01012341234, thumbnail: "https://www.notion.so/Django-test-py-8e2b1605e5864357bcd05971f23f686d", bank_id: 1, account_owner: "한바름", account_number: "010010010", interests: [1, 2, 3, 4] } |
 | Notes                | Ref. banks, genders, interests_types   -Validation fail condition  name: 0 character  email: not email form, duplicated value nickname: duplicated value password: none or under 8 character |
-|                      |                                                              |
-|                      |                                                              |
+
+
 | Title                | AdvertiserSignup                                             |
+| -------------------- | ------------------------------------------------------------ |
 | Method               | POST                                                         |
 | URL                  | /signup/advertiser                                           |
 | URL Params           | None                                                         |
@@ -21,8 +22,9 @@
 | Error Response       | Code: 400,Conetent: "ERROR": "INVALID_EMAIL" Code: 400,Conetent: "ERROR": "EMAIL_EXISTING" Code: 400,Conetent: "ERROR": "INVALID_PASSWORD" Code: 400,Conetent: "ERROR": "COMPANYNAME_MISSING" Code: 400,Conetent: "ERROR": "KEY_MISSING" |
 | Sample Call          | { company_name: "위코드", business_license_number: "12341234", email: "mail@mail.com", password: "12345678", industry_type_id: 1, contact: "01012341234", thumbnail:"https://www.notion.so/Django-test-py-8e2b1605e5864357bcd05971f23f686d", homepage:"https://www.notion.so/Django-test-py-8e2b1605e5864357bcd05971f23f686d", company_address: "서울 강남구 위워크 7층", company_description: "한국 최고의 개발자 양성 학교", } |
 | Notes                | Ref. industry_types    -Validation fail condition  company_name: 0 character  email: not email form, duplicated value password: none or under 8 character |
-|                      |                                                              |
+
 | Title                | AdvertiserSignin                                             |
+| -------------------- | ------------------------------------------------------------ |
 | Method               | POST                                                         |
 | URL                  | /signin/advertiser                                           |
 | URL Params           | None                                                         |
@@ -32,8 +34,9 @@
 | Error Response       | "Code: 400,Conetent: ""ERROR"": ""MISSING_DATA"" 아이디 오기입 - ""ERROR"":""ID_NOT_EXIST"" 비밀번호 오기입 - ""ERROR"":""INVALID_PWD""" |
 | access_token content | { "user_id":"wecode@mail.net", "user_type":"advertiser", "exp":"312893014", "iat":"123124213" } |
 | Notes                |                                                              |
-|                      |                                                              |
+
 | Title                | UserSignin                                                   |
+| -------------------- | ------------------------------------------------------------ |
 | Method               | POST                                                         |
 | URL                  | /signin/user                                                 |
 | URL Params           | None                                                         |
@@ -43,8 +46,6 @@
 | Error Response       | Code: 400,Conetent: "ERROR": "MISSING_DATA" 아이디 오기입 - "ERROR":"ID_NOT_EXIST" 비밀번호 오기입 - "ERROR":"INVALID_PWD" |
 | access_toke content  | { "user_id":"wecode@mail.net", "user_type":"user", "exp":"312893014", "iat":"123124213" } |
 | Notes                |                                                              |
-
-
 
 | Title                                                        | Advertisement_Create                                         |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -57,8 +58,7 @@
 | Error Response                                               | Code: 400, Content: "ERROR":"KEY_MISSING"  Code: 401, Content: "ERROR":"INVALID_USER" Code: 401, Content: "ERROR":"INVALID_TOKEN" Code: 401, Content: "ERROR":"ID_NOT_EXIST" Code: 401, Content: "ERROR":"ERROR":"LOGIN_REQUIERD" |
 | Sample Call                                                  | { title: "위코드광고1", description: "코드를 사랑하는 사람들 오세요!", ad_category_id: 1, video_link: "http://wecode.com", thumbnail: "http://wecode.com/img"  price_per_view: 1000, tag: ['코드','컴퓨터','개발','웹'], interests_type_id: [1,3,5,7,9] } |
 | Notes                                                        | * Advertiser Login Required Ref. ad_categories               |
-|                                                              |                                                              |
-|                                                              |                                                              |
+
 | Title                                                        | Advertisements_on/off_for_Advertiser                         |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Method                                                       | GET                                                          |
@@ -120,9 +120,9 @@
 | Error Response                                               | Code: 400, "ERROR":"INVALID_ADVERTISMENT_ID"  Code: 400, "ERROR":"UNAUTHNTICATED_ACCESS" |
 | Sample Call                                                  | None                                                         |
 | Notes                                                        | *Advertiser Login Required                                   |
-|                                                              |                                                              |
-|                                                              |                                                              |
+
 | Title                                                        | Advertisement_Update                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Method                                                       | POST                                                         |
 | URL                                                          | /advertiser/advertisement/<advertisement_id>                 |
 | URL Params                                                   | Required: advertisement_id[integer]                          |
@@ -187,8 +187,9 @@ Normalization Table
 | id              | name           |
 | 1               | 남성           |
 | 2               | 여성           |
-|                 |                |
+
 | interests_types |                |
+| --------------- | -------------- |
 | id              | name           |
 | 1               | 쇼핑           |
 | 2               | 의류           |
@@ -210,8 +211,10 @@ Normalization Table
 | 18              | 영화           |
 | 19              | 음악           |
 | 20              | 소셜네트워크   |
-|                 |                |
+
 | 지역 구분       |                |
+| --------------- | -------------- |
+| id              |name          |
 | 1               | 서울특별시     |
 | 2               | 인천광역시     |
 | 3               | 대전광역시     |
@@ -226,8 +229,9 @@ Normalization Table
 | 12              | 경상북도       |
 | 13              | 충청남도       |
 | 14              | 충청북도       |
-|                 |                |
+
 | IndustryType    |                |
+| --------------- | -------------- |
 | id              | name           |
 | 1               | 제조업         |
 | 2               | 금융           |
@@ -247,8 +251,10 @@ Normalization Table
 | 16              | 엔터테인먼트   |
 | 17              | 식음료산업     |
 | 18              | 기타           |
-|                 |                |
+
+
 | ad_categories   |                |
+| --------------- | -------------- |
 | id              | name           |
 | 1               | 드라마         |
 | 2               | 코믹           |
