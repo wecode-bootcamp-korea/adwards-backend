@@ -60,6 +60,7 @@
 |                                                              |                                                              |
 |                                                              |                                                              |
 | Title                                                        | Advertisements_on/off_for_Advertiser                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Method                                                       | GET                                                          |
 | URL                                                          | /advertiser/advertisements                                   |
 | URL Params                                                   | Required: None                                               |
@@ -69,9 +70,10 @@
 | Error Response                                               | Code: 400, Content: "ERROR":"LOGIN_REQUIRED"                 |
 | Sample Call                                                  | /advertiser/advertisements                                   |
 | Notes                                                        | *Advertiser login required                                   |
-|                                                              |                                                              |
-|                                                              |                                                              |
+
+
 | Title                                                        | Advertisements_Sorted_by_user_interests_for_User             |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Method                                                       | GET                                                          |
 | URL                                                          | /user/advertisements                                         |
 | URL Params                                                   | Required: None                                               |
@@ -81,9 +83,9 @@
 | Error Response                                               | Code: 400, Content: "ERROR":"KEY_MISSING"  Code: 400, Content: "ERROR":"INVALID_QUERYSTRING" Code: 400, Content: "ERROR":"LOGIN_REQUIRED" |
 | Sample Call                                                  | /advertisement?offset=10&limit=14&price_per_view=set  or /advertisement?offset=10&limit=14&category_id=3 or /advertisement?offset=05&limit=10&advertiser=set |
 | Notes                                                        | *User Login Required                                         |
-|                                                              |                                                              |
-|                                                              |                                                              |
+
 | Title                                                        | Advertisements_Sorted_by_Field                               |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Method                                                       | GET                                                          |
 | URL                                                          | /advertiser/advertisements                                   |
 | URL Params                                                   | Required: None                                               |
@@ -93,9 +95,9 @@
 | Error Response                                               | Code: 400, Content: "ERROR":"KEY_MISSING"  Code: 400, Content: "ERROR":"INVALID_QUERYSTRING" Code: 400, Content: "ERROR":"LOGIN_REQUIRED" |
 | Sample Call                                                  | /advertisement?offset=10&limit=14&tag=자동차  request : { order_by:  [   { field: "price_per_view" , asc: true }, { field: "like_count", asc: false }   ]  }  * 자동차 태그가 달린 광고물을, price_per_view 오름차순, like_count 내림차순으로 정렬해서 10번째에서 13번째 광고까지 데이터 전달한다. |
 | Notes                                                        | field value:  price_per_view: 금액  like_count: 좋아요  view_count: 조회수   category_id = 카테고리별 조회, tag: 태그입력하면 태그 걸린 게시물 조회합니다.    query 스트링, 바디 아무 값 없으면 제일 먼저 만들어진 광고부터 순서대로 리스팅 됨 |
-|                                                              |                                                              |
-|                                                              |                                                              |
+
 | Title                                                        | Advertisement_Detail_for_User                                |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Method                                                       | GET                                                          |
 | URL                                                          | /user/advertisement/<advertisement_id>                       |
 | URL Params                                                   | Required: advertisement_id[integer]                          |
@@ -105,9 +107,10 @@
 | Error Response                                               | Code: 400, "ERROR":"INVALID_ADVERTISMENT_ID"  Code: 400, "ERROR":"UNAUTHNTICATED_ACCESS" |
 | Sample Call                                                  | None                                                         |
 | Notes                                                        | None                                                         |
-|                                                              |                                                              |
-|                                                              |                                                              |
+
+
 | Title                                                        | Advertisement_Detail_for_Advertiser                          |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Method                                                       | GET                                                          |
 | URL                                                          | /advertiser/advertisement/<advertisement_id>                 |
 | URL Params                                                   | Required: advertisement_id[integer]                          |
@@ -129,9 +132,10 @@
 | Error Response                                               | Code: 400, "ERROR":"KEY_MISSING"  Code: 400, :ERROR":"INVALID_ADVERTISEMENT_ID" Code: 400, :ERROR":"INVALID_DATA_TYPE" Code: 400, :ERROR":"INVALID_INPUT" |
 | Sample Call                                                  | { title: "위코드광고22", description: "개발자를 사랑하는 사람들 오세요!", ad_category_id: 1, video_link: "http://wecode.com", thumbnail: "http://wecode.com/img", price_per_view: 1000, tag: ['코드','컴퓨터','개발','웹'] } |
 | Notes                                                        | *광고의 뷰당 가격은 절대 수정이 불가능합니다.                |
-|                                                              |                                                              |
-|                                                              |                                                              |
+
+
 | Title                                                        | Advertisement_Delete                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Method                                                       | DELETE                                                       |
 | URL                                                          | /advertiser/advertisement/<advertisement_id>                 |
 | URL Params                                                   | Required: advertisement_id[integer]                          |
