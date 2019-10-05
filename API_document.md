@@ -2,8 +2,8 @@
 | -------------------- | ------------------------------------------------------------ |
 | Method               | POST                                                         |
 | URL                  | /signup/user                                                 |
-| URL Params           | None                                                         |
-| None                 |                                                              |
+| URL Params(Required)           | None                                                         |
+| URL Params(Optional)           | None                                                           |
 | Data Params          | { user_name: [string], nickname: [string](unique), email: [string](unique), password: [string], age: [integer], state_id: [integer], gender_id: [integer], cellphone: [string],   thumbnail: [string], bank_id: [integer], account_owner: [string], account_number: [string], interests: [array composed of integer] } |
 | Success Response     | Code:200, Content: None                                      |
 | Error Response       | Code: 400,Conetent: "ERROR": "INVALID_EMAIL" Code: 400,Conetent: "ERROR": "EMAIL_EXISTING" Code: 400,Conetent: "ERROR": "NICKNAME_EXISTING" Code: 400,Conetent: "ERROR": "INVALID_PASSWORD" Code: 400,Conetent: "ERROR": "NAME_MISSING" Code: 400,Conetent: "ERROR": "KEY_MISSING" |
@@ -15,8 +15,8 @@
 | -------------------- | ------------------------------------------------------------ |
 | Method               | POST                                                         |
 | URL                  | /signup/advertiser                                           |
-| URL Params           | None                                                         |
-| None                 |                                                              |
+| URL Params(Required)           | None                                                         |
+| URL Params(Optional)           | None                                                           |
 | Data Params          | { company_name: [string](unique), business_license_number: [integer], email: [string](unique), password: [string], industry_type_id: [integer], contact: [string], thumbnail: [string], homepage: [string], company_address: [string], company_description: [string], } |
 | Success Response     | Code:200, Content: None                                      |
 | Error Response       | Code: 400,Conetent: "ERROR": "INVALID_EMAIL" Code: 400,Conetent: "ERROR": "EMAIL_EXISTING" Code: 400,Conetent: "ERROR": "INVALID_PASSWORD" Code: 400,Conetent: "ERROR": "COMPANYNAME_MISSING" Code: 400,Conetent: "ERROR": "KEY_MISSING" |
@@ -28,7 +28,8 @@
 | Method               | POST                                                         |
 | URL                  | /signin/advertiser                                           |
 | URL Params           | None                                                         |
-| None                 |                                                              |
+| URL Params(Required)           | None                                                         |
+| URL Params(Optional)           | None                                                           |
 | Data Params          | { "email":"wecode@mail.net", "password":"12341234" }         |
 | Success Response     | Code:200, Content: {"access_token":"dlasdlkajsdklasjdlsdk;asld;asdka;dkas;dla;sdklaa;sdk;akd;"} |
 | Error Response       | "Code: 400,Conetent: ""ERROR"": ""MISSING_DATA"" 아이디 오기입 - ""ERROR"":""ID_NOT_EXIST"" 비밀번호 오기입 - ""ERROR"":""INVALID_PWD""" |
@@ -39,8 +40,8 @@
 | -------------------- | ------------------------------------------------------------ |
 | Method               | POST                                                         |
 | URL                  | /signin/user                                                 |
-| URL Params           | None                                                         |
-| None                 |                                                              |
+| URL Params(Required)           | None                                                         |
+| URL Params(Optional)           | None                                                           |
 | Data Params          | { "email":"wecode@mail.net", "password":"12341234" }         |
 | Success Response     | Code:200, Content: {"access_token":"dlasdlkajsdklasjdlsdk;asld;asdka;dkas;dla;sdklaa;sdk;akd;"} |
 | Error Response       | Code: 400,Conetent: "ERROR": "MISSING_DATA" 아이디 오기입 - "ERROR":"ID_NOT_EXIST" 비밀번호 오기입 - "ERROR":"INVALID_PWD" |
@@ -51,8 +52,8 @@
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Method                                                       | POST                                                         |
 | URL                                                          | /advertisement                                               |
-| URL Params                                                   | None                                                         |
-| None                                                         |                                                              |
+| URL Params(Required)           | None                                                         |
+| URL Params(Optional)           | None                                                           |
 | Data Params                                                  | {  title: [string], description: [string], ad_category_id: [integer], video_link: [string], thumbnail: [string], budget: [integer] price_per_view: [integer], tag: [srting_array], interests_type_id: [Integer_array] } |
 | Success Response                                             | Code: 200, Content: "advertisement_id" : advertisement_id    |
 | Error Response                                               | Code: 400, Content: "ERROR":"KEY_MISSING"  Code: 401, Content: "ERROR":"INVALID_USER" Code: 401, Content: "ERROR":"INVALID_TOKEN" Code: 401, Content: "ERROR":"ID_NOT_EXIST" Code: 401, Content: "ERROR":"ERROR":"LOGIN_REQUIERD" |
@@ -63,8 +64,8 @@
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Method                                                       | GET                                                          |
 | URL                                                          | /advertiser/advertisements                                   |
-| URL Params                                                   | Required: None                                               |
-| Optional: None                                               |                                                              |
+| URL Params(Required)           | None                                                         |
+| URL Params(Optional)           | None                                                           |
 | Data Params                                                  | None                                                         |
 | Success Response                                             | Code: 200, Content:  { on_advertisement:[ { advertisement_id: [integer], thumbnail: [string], title: [string]  } ], off_advertisement:[ { advertisement_id: [integer], thumbnail: [string], title: [string] } ] } |
 | Error Response                                               | Code: 400, Content: "ERROR":"LOGIN_REQUIRED"                 |
@@ -76,8 +77,8 @@
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Method                                                       | GET                                                          |
 | URL                                                          | /user/advertisements                                         |
-| URL Params                                                   | Required: None                                               |
-| Optional: offset= [integer](default=0),  limit= [integer](default=3) |                                                              |
+| URL Params(Required)           | None                                                         |
+| URL Params(Optional)           | offset= [integer](default=0),  limit= [integer](default=3)   |
 | Data Params                                                  | None                                                         |
 | Success Response                                             | Code: 200, Content:  { "RESULT": [ ... { advertisement_id: [integer], title: [string], thumbnail: [string], price_per_view: [integer], created_at: [string] } ], "TOTAL": [integer]  } |
 | Error Response                                               | Code: 400, Content: "ERROR":"KEY_MISSING"  Code: 400, Content: "ERROR":"INVALID_QUERYSTRING" Code: 400, Content: "ERROR":"LOGIN_REQUIRED" |
@@ -88,8 +89,8 @@
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Method                                                       | GET                                                          |
 | URL                                                          | /advertiser/advertisements                                   |
-| URL Params                                                   | Required: None                                               |
-| Optional: offset= [integer](default=0),  limit= [integer](default=3),  category_id= [integer](Ref. ad_categories),  tag = [string] |                                                              |
+| URL Params(Required)           | None                                                         |
+| URL Params(Optional)           |  offset= [integer](default=0),  limit= [integer](default=3),  category_id= [integer](Ref. ad_categories),  tag = [string]   |
 | Data Params                                                  | { order_by:  [  ... { field: [string], asc: [boolean] }  ...  ]  } |
 | Success Response                                             | Code: 200, Content:  { "RESULT": [ ... { advertisement_id: [integer], title: [string], thumbnail: [string], price_per_view: [integer], } ], "TOTAL": [integer]  } |
 | Error Response                                               | Code: 400, Content: "ERROR":"KEY_MISSING"  Code: 400, Content: "ERROR":"INVALID_QUERYSTRING" Code: 400, Content: "ERROR":"LOGIN_REQUIRED" |
@@ -100,8 +101,8 @@
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Method                                                       | GET                                                          |
 | URL                                                          | /user/advertisement/<advertisement_id>                       |
-| URL Params                                                   | Required: advertisement_id[integer]                          |
-| Optional: None                                               |                                                              |
+| URL Params(Required)           | None                                                         |
+| URL Params(Optional)           | None                                                           |
 | Data Params                                                  | None                                                         |
 | Success Response                                             | Code: 200, Content:   RESULT :  {  title: [string], description: [string], video_link: [string], price_per_view: [integer],  advertiser_id: [integer] company_name: [integer] tag: [array],   thumbnail: [string],  } |
 | Error Response                                               | Code: 400, "ERROR":"INVALID_ADVERTISMENT_ID"  Code: 400, "ERROR":"UNAUTHNTICATED_ACCESS" |
@@ -113,8 +114,8 @@
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Method                                                       | GET                                                          |
 | URL                                                          | /advertiser/advertisement/<advertisement_id>                 |
-| URL Params                                                   | Required: advertisement_id[integer]                          |
-| Optional: None                                               |                                                              |
+| URL Params(Required)           | None                                                         |
+| URL Params(Optional)           | None                                                           |
 | Data Params                                                  | None                                                         |
 | Success Response                                             | Code: 200, Content:   **Advertiser Logined** RESULT :  {  title: [string], description: [string], video_link: [string], view_count: [integer], price_per_view: [integer],  advertiser_id: [integer] tag: [array],   thumbnail: [string], budget: [integer], interests_type_id: [array], switch: [Boolean] } |
 | Error Response                                               | Code: 400, "ERROR":"INVALID_ADVERTISMENT_ID"  Code: 400, "ERROR":"UNAUTHNTICATED_ACCESS" |
@@ -125,8 +126,8 @@
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Method                                                       | POST                                                         |
 | URL                                                          | /advertiser/advertisement/<advertisement_id>                 |
-| URL Params                                                   | Required: advertisement_id[integer]                          |
-| Optional: None                                               |                                                              |
+| URL Params(Required)           | None                                                         |
+| URL Params(Optional)           | None                                                           |
 | Data Params                                                  | { title: [string], description: [string], ad_category_id: [integer_array],  video_link: [string], thumbnail: [string], tag: [string_array], swtich: [Boolean] } |
 | Success Response                                             | Code: 200                                                    |
 | Error Response                                               | Code: 400, "ERROR":"KEY_MISSING"  Code: 400, :ERROR":"INVALID_ADVERTISEMENT_ID" Code: 400, :ERROR":"INVALID_DATA_TYPE" Code: 400, :ERROR":"INVALID_INPUT" |
@@ -138,8 +139,8 @@
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Method                                                       | DELETE                                                       |
 | URL                                                          | /advertiser/advertisement/<advertisement_id>                 |
-| URL Params                                                   | Required: advertisement_id[integer]                          |
-| Optional: None                                               |                                                              |
+| URL Params(Required)           | None                                                         |
+| URL Params(Optional)           | None                                                           |
 | Data Params                                                  | None                                                         |
 | Success Response                                             | Code: 200                                                    |
 | Error Response                                               | Code: 400, "ERROR":"INVALID_ADVERTISEMENT_ID"                |
@@ -150,30 +151,32 @@
 | ---------------- | ------------------------------------------------------------ |
 | Method           | POST                                                         |
 | URL              | 10.58.2.94:8000/quiz                                         |
-| URL Params       |                                                              |
-|                  |                                                              |
+| URL Params(Required)           | None                                                         |
+| URL Params(Optional)           | None                                                           |
 | Data Params      | quiz_data = { "ad_id":1, "quizzes":[ { "title":"wecode quiz", "content":"what is wecode?", "choices":["교육기관", "부트캠프", "헌혈기관", "외주업체"], "answers":["교육기관", "부트캠프"] } ] |
 | Success Response | Http response 200                                            |
 | Error Response   | {"ERROR":"MISSING_DATA"}, status_code = 400 - data가 누락 될 시 |
 | Sample Call      |                                                              |
 | Notes            | 현재 광고 아이디와 퀴즈콘텐츠를 주시되, 퀴즈를 추가적으로 생성할 시 퀴즈별로 데이터를 리스트로 묶어서 위와 같이 주시면 됩니다. 해당 키값은 위와 동일합니다. |
-|                  |                                                              |
+
 | Title            | quiz_list                                                    |
+|------------------|--------------------------------------------------------------|
 | Method           | GET                                                          |
 | URL              | /advertisement/<int:ad_id>/quiz                              |
-| URL Params       |                                                              |
-|                  |                                                              |
+| URL Params(Required)           | None                                                         |
+| URL Params(Optional)           | None                                                           |
 | Data Params      | None                                                         |
 | Success Response | [ { 'answer_type': 'multi_answer', 'choices': [ {'content': 'o', 'id': 1}, {'content': 'x', 'id': 2} ], 'content': '현재 교육중인 기수는 3기다.', 'created_at': '2019-09-25T13:39:10.925', 'question': '위코드', 'question_type': 'multi_choices' }, { 'answer_type': 'multi_answer', 'choices': [ {'content': '12', 'id': 3}, {'content': '15', 'id': 4}, {'content': '20', 'id': 5}, {'content': '21', 'id': 6} ], 'content': '현재 교육중인 기수는 몇명일까요?', 'created_at': '2019-09-25T13:39:10.943', 'question': '위코드', 'question_type': 'multi_choices' } ] |
 | Error Response   | {"ERROR":"MISSING_DATA"}, status_code = 400 - data가 누락 될 시 |
 | Sample Call      |                                                              |
 | Notes            | 현재 광고 아이디와 퀴즈콘텐츠를 주시되, 퀴즈를 추가적으로 생성할 시 퀴즈별로 데이터를 리스트로 묶어서 위와 같이 주시면 됩니다. 해당 키값은 위와 동일합니다. |
-|                  |                                                              |
+
 | Title            | quiz_correct                                                 |
+|------------------|--------------------------------------------------------------|
 | Method           | POST                                                         |
 | URL              | /quiz/answer                                                 |
-| URL Params       | NOon                                                         |
-|                  |                                                              |
+| URL Params(Required)           | None                                                         |
+| URL Params(Optional)           | None                                                           |
 | Data Params      | test = { "ad_id":1, "user_answers": [ {"quiz_id": 1, "answers": [1]}, {"quiz_id": 2, "answers": [3,4,5]} ] } |
 | Success Response | 모든 퀴즈 정답 일 경우 {"message":True} 하나라도 오답 일 경우 {"message":False} 200 |
 | Error Response   | {"ERROR":"MISSING_DATA"}, status_code = 400 - data가 누락 될 시 |
@@ -182,15 +185,15 @@
 
 Normalization Table
 
-| genders         |                |
-| --------------- | -------------- |
+gender
 | id              | name           |
+| --------------- | -------------- |
 | 1               | 남성           |
 | 2               | 여성           |
 
-| interests_types |                |
-| --------------- | -------------- |
+interests_types
 | id              | name           |
+| --------------- | -------------- |
 | 1               | 쇼핑           |
 | 2               | 의류           |
 | 3               | 장난감         |
@@ -210,11 +213,11 @@ Normalization Table
 | 17              | 독서           |
 | 18              | 영화           |
 | 19              | 음악           |
-| 20              | 소셜네트워크   |
+| 20              | 소셜네트워크   | 
 
-| 지역 구분       |                |
-| --------------- | -------------- |
+reigon
 | id              |name          |
+| --------------- | -------------- |
 | 1               | 서울특별시     |
 | 2               | 인천광역시     |
 | 3               | 대전광역시     |
@@ -230,9 +233,9 @@ Normalization Table
 | 13              | 충청남도       |
 | 14              | 충청북도       |
 
-| IndustryType    |                |
-| --------------- | -------------- |
+IndustryType
 | id              | name           |
+| --------------- | -------------- |
 | 1               | 제조업         |
 | 2               | 금융           |
 | 3               | 건설           |
@@ -253,9 +256,9 @@ Normalization Table
 | 18              | 기타           |
 
 
-| ad_categories   |                |
-| --------------- | -------------- |
+ad_categories
 | id              | name           |
+| --------------- | -------------- |
 | 1               | 드라마         |
 | 2               | 코믹           |
 | 3               | 음악           |
@@ -267,9 +270,9 @@ Normalization Table
 | 9               | 정보           |
 | 10              | 영화           |
 
-| banks |              |              |
-| ----- | ------------ | ------------ |
+banks 
 | id    | name         | contact      |
+| ----- | ------------ | ------------ |
 | 1     | KEB하나은행  | 02-1201-2001 |
 | 2     | SC제일은행   | 02-1201-2002 |
 | 3     | 국민은행     | 02-1201-2003 |
