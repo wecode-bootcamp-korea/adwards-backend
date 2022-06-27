@@ -7,7 +7,7 @@ django-cors-headers==3.1.0
 django-extensions==2.2.1
 httpie==1.0.3
 idna==2.8
-mysql-connector-python==8.0.5
+mysql-connector-python==8.0.14
 protobuf==3.9.1
 pycparser==2.19
 Pygments==2.4.2
